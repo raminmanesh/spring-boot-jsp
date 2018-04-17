@@ -22,14 +22,13 @@ public class HelloController {
     
     @ResponseBody
     @RequestMapping(value="/addperson", method=RequestMethod.POST)
-    public boolean addPerson(@RequestBody Person person) {
+    public List<Person> addPerson(@RequestBody Person person) {
     	try {
-    		persons.add(person);
-    		return true;
+    		persons.add(person); 
+    		return persons;
     	}catch (Exception e) {
-    		return false;
+    		e.printStackTrace();
+    		return null;
 		}
-    	
-        
     }
 }

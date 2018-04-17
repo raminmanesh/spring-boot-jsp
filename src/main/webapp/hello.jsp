@@ -29,12 +29,12 @@
 	<!-- Button trigger modal -->
 	<div style="padding: 20px;">
 		<button type="button" class="btn btn-primary" data-toggle="modal"
-		data-target="#saveNewPerson">Add Person</button>
+		data-target="#popup">Add Person</button>
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="saveNewPerson" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="popup" tabindex="-1" role="dialog"
+		aria-labelledby="modal" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -55,7 +55,8 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" onclick="savePerson()">Save new person</button>
+					<button type="button" class="btn btn-primary" onclick="savePerson()" data-toggle="modal"
+						data-target="#popup" >Save new person</button>
 				</div>
 			</div>
 		</div>
@@ -67,6 +68,7 @@
 	var email = $("#email").val("");
 	
 	function savePerson(){
+
 		var name = $("#name").val();
 		var email = $("#email").val();
 		
@@ -83,13 +85,17 @@
 				  },
 				  "processData": false,
 				  "data": "{\"name\":  \""+ name +"\",\"email\": \""+ email +"\"}"
-				}
+		}
 
-				$.ajax(settings).done(function (response) {
-				  console.log(response.length);
-				});
-		
-		
+		$.ajax(settings).done(function (response) {
+			if(response.length>0){
+				$("#table-content").empty();
+				for (var i = 0; i < response.length; i++) {
+					$("#table-content").append("<tr><td>"+response[i].name+"<td><td>"+response[i].email+"<td></tr>");
+				}
+			}
+			
+		});
 	}
 	
 	</script>
@@ -101,7 +107,7 @@
 				<th>Email</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id="table-content">
 			<c:forEach items="${persons}" var="person">
 				<tr>
 					<td>${person.name}</td>
